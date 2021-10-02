@@ -39,20 +39,39 @@ public class Main {
     public static void main(String[] args) {
 	// write your code here
         AddressBook myBook = new AddressBook();
-        int choice = getInput();
-        switch (choice) {
-            case 1:
+        int choice = 0;
+        Scanner sc = new Scanner(System.in);
+        while (choice != 4) {
+            choice = getInput();
+            if (choice == 1) {
                 myBook.addContact();
-                break;
-            case 2:
-                myBook.searchContact();
-                break;
-            case 3:
+                try {
+                    System.in.read();
+                } catch (Exception e) {
+                }
+                continue;
+            } else if (choice == 2) {
+                int deleteOrNot = myBook.searchContact();
+                if (deleteOrNot == 1) {
+                    try {
+                        System.in.read();
+                    } catch (Exception e) {
+                    }
+                    continue;
+                } else {
+                    continue;
+                }
+            } else if (choice == 3) {
                 myBook.displayContactList(myBook.getContactList());
-                break;
-            case 4:
+                System.out.println("Press Enter to go back to the main window.");
+                try {
+                    System.in.read();
+                } catch (Exception e) {
+                }
+                continue;
+            } else {
                 System.out.println("Thank you for using");
-                break;
+            }
         }
     }
 }

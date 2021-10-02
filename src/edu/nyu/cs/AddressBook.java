@@ -1,5 +1,5 @@
 package edu.nyu.cs;
-import java.sql.Array;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -57,89 +57,72 @@ public class AddressBook {
         this.lastId++;
         this.contactList.add(newContact);
         System.out.println("--------------------------------------------------------------------------");
-        System.out.println("Saved successfully...Press any key to go back to the Main Window");
+        System.out.println("Saved successfully...Press Enter to go back to the Main Window");
     }
 
-    public void searchContact() {
+    public int searchContact() {
         System.out.println("Main Window --> Search for contact window: (Choose one of the following options");
         System.out.println("===============================================================================");
         int choice = getSearchChoice();
+        int deleteOrNot = 0;
         List<Contact> result = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
-        switch (choice) {
-            case 1:
-                System.out.println("Main Window --> Search for contact window --> Search by name");
-                System.out.println("============================================================");
-                System.out.println("(1) Enter name: ");
-                String nameToSearch = sc.next();
-                result = searchByName(nameToSearch);
-                if (result == null || result.size() == 0) {
-                    System.out.println("No contact found");
-                } else {
-                    displayContactList(result);
-                    System.out.println();
-                    int deleteOrNot = this.getDeleteChoice();
-                    switch (deleteOrNot) {
-                        case 1:
-                            System.out.println("Main Window --> Search for contact window --> Search by name --> Delete a contact");
-                            System.out.println("==================================================================================");
-                            deleteContact();
-                            break;
-                        case 2:
-                            System.exit(0);
-                            break;
-                    }
+        if (choice == 1) {
+            System.out.println("Main Window --> Search for contact window --> Search by name");
+            System.out.println("============================================================");
+            System.out.println("(1) Enter name: ");
+            String nameToSearch = sc.nextLine();
+            result = searchByName(nameToSearch);
+            if (result == null || result.size() == 0) {
+                System.out.println("No contact found");
+            } else {
+                displayContactList(result);
+                System.out.println();
+                deleteOrNot = this.getDeleteChoice();
+                if (deleteOrNot == 1) {
+                    System.out.println("Main Window --> Search for contact window --> Search by name --> Delete a contact");
+                    System.out.println("==================================================================================");
+                    deleteContact();
                 }
-                break;
-            case 2:
-                System.out.println("Main Window --> Search for contact window --> Search by email");
-                System.out.println("============================================================");
-                System.out.println("(2) Enter email: ");
-                String emailToSearch = sc.next();
-                result = searchByEmail(emailToSearch);
-                if (result == null || result.size() == 0) {
-                    System.out.println("No contact found");
-                } else {
-                    displayContactList(result);
-                    System.out.println();
-                    int deleteOrNot = this.getDeleteChoice();
-                    switch (deleteOrNot) {
-                        case 1:
-                            System.out.println("Main Window --> Search for contact window --> Search by email --> Delete a contact");
-                            System.out.println("==================================================================================");
-                            deleteContact();
-                            break;
-                        case 2:
-                            System.exit(0);
-                            break;
-                    }
+            }
+        } else if (choice == 2) {
+            System.out.println("Main Window --> Search for contact window --> Search by email");
+            System.out.println("============================================================");
+            System.out.println("(2) Enter email: ");
+            String emailToSearch = sc.nextLine();
+            result = searchByEmail(emailToSearch);
+            if (result == null || result.size() == 0) {
+                System.out.println("No contact found");
+            } else {
+                displayContactList(result);
+                System.out.println();
+                deleteOrNot = this.getDeleteChoice();
+                if (deleteOrNot == 1) {
+                    System.out.println("Main Window --> Search for contact window --> Search by email --> Delete a contact");
+                    System.out.println("==================================================================================");
+                    deleteContact();
                 }
-                break;
-            case 3:
-                System.out.println("Main Window --> Search for contact window --> Search by phone");
-                System.out.println("============================================================");
-                System.out.println("(3) Enter phone number: ");
-                String numberToSearch = sc.next();
-                result = searchByNumber(numberToSearch);
-                if (result == null || result.size() == 0) {
-                    System.out.println("No contact found");
-                } else {
-                    displayContactList(result);
-                    System.out.println();
-                    int deleteOrNot = this.getDeleteChoice();
-                    switch (deleteOrNot) {
-                        case 1:
-                            System.out.println("Main Window --> Search for contact window --> Search by phone --> Delete a contact");
-                            System.out.println("==================================================================================");
-                            deleteContact();
-                            break;
-                        case 2:
-                            System.exit(0);
-                            break;
-                    }
+            }
+        } else {
+            System.out.println("Main Window --> Search for contact window --> Search by phone");
+            System.out.println("============================================================");
+            System.out.println("(3) Enter phone number: ");
+            String numberToSearch = sc.nextLine();
+            result = searchByNumber(numberToSearch);
+            if (result == null || result.size() == 0) {
+                System.out.println("No contact found");
+            } else {
+                displayContactList(result);
+                System.out.println();
+                deleteOrNot = this.getDeleteChoice();
+                if (deleteOrNot == 1) {
+                    System.out.println("Main Window --> Search for contact window --> Search by phone --> Delete a contact");
+                    System.out.println("==================================================================================");
+                    deleteContact();
                 }
-                break;
+            }
         }
+        return deleteOrNot;
 
     }
 
@@ -157,12 +140,14 @@ public class AddressBook {
                 sc.next();
             }
         }
+        Contact delete = new Contact();
         for (Contact c : this.contactList) {
             if (c.getId() == toDelete) {
-                this.contactList.remove(c);
+                delete = c;
             }
         }
-        System.out.println("Deleted...Press any key to go back to the Main Window");
+        this.contactList.remove(delete);
+        System.out.println("Deleted...Press Enter to go back to the Main Window");
 
     }
 
@@ -269,9 +254,9 @@ public class AddressBook {
                 String.format("%-20s", "Phone") + " | " + "Note\n");
         System.out.println("-----------------------------------------------------------------------------------------------");
         for (Contact c : toDisplay) {
-            System.out.printf(c.getId() + " | " + String.format("%-30s", c.getName()) + " | "
-                    + String.format("%-30s", c.getEmail()) + " | " +
-                    String.format("%-20s", c.getNumber()) + " | " + c.getNote());
+            System.out.printf(c.getId() + " | " + String.format("%-20s", c.getName()) + " | "
+                    + String.format("%-25s", c.getEmail()) + " | " +
+                    String.format("%-20s", c.getNumber()) + " | " + c.getNote() + "\n");
         }
         System.out.println("-----------------------------------------------------------------------------------------------");
     }

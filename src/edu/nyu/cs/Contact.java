@@ -9,9 +9,12 @@ public class Contact {
     private String number;
     private String note;
 
+    public Contact() {
 
+    }
     public Contact(String name, String email, String number, String note, int id) {
         this.name = name;
+        this.email = email;
         this.number = number;
         this.note = note;
         this.id = id;
